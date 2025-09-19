@@ -12,11 +12,11 @@ public class StringSchema extends BaseSchema<String> {
         return this;
     }
 
-    public void contains(String content) throws IllegalArgumentException {
+    public StringSchema contains(String content) throws IllegalArgumentException {
         if (content == null) {
             throw new IllegalArgumentException("Содержание не должно быть пустым");
         }
         addCheck("contains", str -> str.contains(content));
-
+        return this;
     }
 }

@@ -9,7 +9,7 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
         return this;
     }
 
-    public <T> void shape(Map<?, BaseSchema<T>> schemas) {
+    public <T> MapSchema shape(Map<?, BaseSchema<T>> schemas) {
         if (schemas == null) {
             throw new IllegalArgumentException("Значение не может быть null");
         }
@@ -25,6 +25,7 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
                 });
 
         addCheck("shape", shapeCheck);
+        return this;
     }
 
     public void sizeof(int num) {

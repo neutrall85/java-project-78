@@ -2,8 +2,9 @@ package hexlet.code.schemas;
 
 public final class NumberSchema extends BaseSchema<Number> {
 
-    public void required() {
+    public NumberSchema required() {
         addCheck("required", num -> num != null && (Integer) num != 0);
+        return this;
     }
 
     public NumberSchema positive() {
@@ -11,7 +12,8 @@ public final class NumberSchema extends BaseSchema<Number> {
         return this;
     }
 
-    public void range(int min, int max) {
+    public NumberSchema range(int min, int max) {
         addCheck("range", num -> min <= (Integer) num && (Integer) num <= max);
+        return this;
     }
 }
