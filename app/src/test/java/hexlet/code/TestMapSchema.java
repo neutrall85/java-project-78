@@ -1,8 +1,10 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,35 +15,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TestMapSchema {
     private final Validator v = new Validator();
     private final MapSchema schema = v.map();
+    private final Map<String, BaseSchema<String>> schemas = new HashMap<>();
 
     @Test
     void testRequiredDefault() {
-        assertTrue(schema.isValid(null));  // По умолчанию null допустим
+        assertTrue(schema.isValid(null));
     }
 
     @Test
     void testRequiredTrue() {
         schema.required();
-        assertFalse(schema.isValid(null));  // При required=true null недопустим
+        assertFalse(schema.isValid(null));
     }
 
     @Test
     void testSizeValidation() {
         schema.sizeof(2);
-
-        // Карта нужного размера
         assertTrue(schema.isValid(Map.of("key1", "value1", "key2", "value2")));
-
-        // Карта меньшего размера
         assertFalse(schema.isValid(Map.of("key1", "value1")));
-
-        // Карта большего размера
         assertFalse(schema.isValid(Map.of("key1", "value1", "key2", "value2", "key3", "value3")));
     }
 
     @Test
     void testNullSize() {
-        // Без указания размера любая карта допустима
         assertTrue(schema.isValid(Map.of("key1", "value1")));
         assertTrue(schema.isValid(Map.of("key1", "value1", "key2", "value2")));
         assertTrue(schema.isValid(Map.of()));
@@ -49,13 +45,11 @@ class TestMapSchema {
 
     @Test
     void testEmptyMap() {
-        assertTrue(schema.isValid(Map.of()));  // Пустая карта допустима
+        assertTrue(schema.isValid(Map.of()));
     }
 
     @Test
     void testNegativeSizeThrowsException() {
-
-        // Проверка, что метод выбрасывает исключение при отрицательном размере
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
             schema.sizeof(-1)
         );
@@ -66,10 +60,30 @@ class TestMapSchema {
     @Test
     void testChainingMethods() {
         schema.required().sizeof(1);
+        assertFalse(schema.isValid(null));
+        assertFalse(schema.isValid(Map.of()));
+        assertTrue(schema.isValid(Map.of("key", "value")));
+    }
 
-        // Проверка корректности цепочки вызовов
-        assertFalse(schema.isValid(null));  // required=true
-        assertFalse(schema.isValid(Map.of()));  // размер не соответствует
-        assertTrue(schema.isValid(Map.of("key", "value")));  // все условия соблюдены
+    @Test
+    void testShapeMethod() {
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+        schema.shape(schemas);
+
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        assertTrue(schema.isValid(human1));
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        assertFalse(schema.isValid(human2));
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertFalse(schema.isValid(human3));
     }
 }
