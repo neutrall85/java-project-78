@@ -11,7 +11,7 @@ public abstract class BaseSchema<T> {
         this.checks.put(name, check);
     }
 
-    public boolean isValid(T item) {
+    public final boolean isValid(T item) {
         if (item == null) {
             return !checks.containsKey("required");
         }
