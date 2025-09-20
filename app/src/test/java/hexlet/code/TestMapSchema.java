@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TestMapSchema {
     private final Validator v = new Validator();
     private final MapSchema schema = v.map();
-    private final Map<String, BaseSchema<String>> schemas = new HashMap<>();
 
     @Test
     void testRequiredDefault() {
@@ -53,7 +52,6 @@ class TestMapSchema {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
             schema.sizeof(-1)
         );
-
         assertEquals("Размер не может быть отрицательным", exception.getMessage());
     }
 
@@ -66,7 +64,8 @@ class TestMapSchema {
     }
 
     @Test
-    void testShapeMethod() {
+    void testStringShapeMethod() {
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
         schemas.put("lastName", v.string().required().minLength(2));
         schema.shape(schemas);
