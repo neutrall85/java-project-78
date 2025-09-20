@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema<T> {
-    final Map<String, Predicate<T>> checks = new HashMap<>();
+    private final Map<String, Predicate<T>> checks = new HashMap<>();
 
     void addCheck(String name, Predicate<T> check) {
         this.checks.put(name, check);
