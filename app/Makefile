@@ -5,8 +5,7 @@ lint:
 	./gradlew checkstyleTest
 
 build:
-	./gradlew clean
-	./gradlew installDist
+	./gradlew clean build
 
 test:
 	./gradlew test
