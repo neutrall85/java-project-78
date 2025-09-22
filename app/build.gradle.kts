@@ -5,7 +5,7 @@ val junitEngineVersion = "5.9.2"
 
 
 plugins {
-    id("application")
+    id("java")
     id("checkstyle")
     id("jacoco")
     id("org.sonarqube") version "6.0.1.5171"
@@ -56,8 +56,4 @@ tasks {
             property("sonar.organization", "neutrall85")
             property("sonar.host.url", "https://sonarcloud.io")
         }
-    }
-
-    application {
-        mainClass = "hexlet.code.App"
     }
